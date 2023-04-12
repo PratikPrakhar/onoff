@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>XYZ</title>
+</head>
+<style>
+	.toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+</style>
+
+<body>
+   <p> <label class="toggle">
+    <input type="checkbox" id="toggleButton">
+    <span class="slider round"></span>
+</label></p>
+  <button id="1" onclick="handleButtonClick('1')" class="myButton" disabled>On</button>
+  <button id="0" onclick="handleButtonClick('0')" class="myButton" disabled>Off</button>
+  <script>
+    const toggleButton = document.getElementById("toggleButton");
+const myButtons = document.getElementsByClassName("myButton");
+
+toggleButton.addEventListener("change", function() {
+  if (this.checked) {
+    for (let i = 0; i < myButtons.length; i++) {
+      myButtons[i].disabled = false;
+    }
+  } else {
+    for (let i = 0; i < myButtons.length; i++) {
+      myButtons[i].disabled = true;
+    }
+  }
+});
+
+
+    function handleButtonClick(buttonId) {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+        }
+      };
+      xhttp.open('POST', '/button', true);
+      xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      const value = encodeURIComponent(buttonId);
+      const data = `value=${value}`;
+      xhttp.send(data);
+    }
+  </script>
+</body>
+</html>
